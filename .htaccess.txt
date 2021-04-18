@@ -1,0 +1,94 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+#Força a utilizar Cache-Control e Expires header
+<IfModule mod_headers.c>
+Cabeçalho ETag unset
+</ IfModule>
+FileETag Nenhum
+<IfModule mod_expires.c>
+ExpiresActive em
+ExpiresDefault "acesso mais 1 month"
+texto ExpiresByType / cache-manifest "acesso acrescido 0 segundos"
+# Html
+texto ExpiresByType / html "acesso mais 0 segundos"
+# dados
+texto ExpiresByType / xml "acesso acrescido 0 segundos"
+aplicação ExpiresByType / xml "acesso acrescido 0 segundos"
+aplicação ExpiresByType / json "acesso acrescido 0 segundos"
+# Alimentação
+aplicação ExpiresByType / rss + xml "acesso mais 1 hora"
+ExpiresByType aplicação / átomo + xml "acesso mais 1 hora"
+# Favicon
+imagem ExpiresByType / x-icon "acesso mais 1 semana"
+# Suporte: imagens, vídeo, áudio
+imagem ExpiresByType / gif "acesso mais 1 month"
+imagem ExpiresByType / png "acesso mais 1 month"
+imagem ExpiresByType / jpg "acesso mais 1 month"
+imagem ExpiresByType / jpeg "acesso mais 1 month"
+ExpiresByType video / ogg "acesso mais 1 month"
+ExpiresByType "acesso mais 1 month" áudio / ogg
+vídeo ExpiresByType / mp4 "acesso mais 1 month"
+ExpiresByType vídeo / WebM "acesso mais 1 month"
+# arquivos HTC
+ExpiresByType text / x-componente "acesso mais 1 month"
+# Webfonts
+aplicação ExpiresByType / x-font-ttf "acesso mais 1 month"
+fonte ExpiresByType / OpenType "acesso mais 1 month"
+aplicação ExpiresByType / x-fonte woff "acesso mais 1 month"
+ExpiresByType image / svg + xml "acesso mais 1 month"
+ExpiresByType application / vnd.ms-fontobject "acesso mais 1 month"
+# CSS / JS
+texto ExpiresByType / css "acesso mais um ano"
+aplicação ExpiresByType / "acesso mais um ano" javascript
+ExpiresByType application / x-javascript "acesso mais um ano"
+</ IfModule>
+#Força o IE a sempre carregar utilizando a última versão disponível
+<IfModule mod_headers.c>
+conjunto de cabeçalho X-UA-Compatible "IE = Edge, chrome = 1"
+<FilesMatch "\ (js |. Css | gif | png | jpeg | pdf | xml | oga | ogg | m4a | ogv | mp4 | m4v | webm | svg | SVGZ | EOT | ttf | OTF | woff | ico | webp | AppCache | manifesto | HTC | crx | oex | xpi | safariextz | vcf) $">
+Cabeçalho unset X-UA-Compatible
+</ FilesMatch>
+</ IfModule>
+
+<IfModule mod_deflate.c>
+<IfModule mod_setenvif.c>
+<IfModule mod_headers.c>
+SetEnvIfNoCase ^ (Accept-EncodXng | X-cept-Encoding | X {15} | ~ {15} | - {15}) $ ^ ((gzip |? Deflate) \ s *, \ s *) + | [X ~ -] {4,13} $ HAVE_Accept-Encoding
+RequestHeader anexar Accept-Encoding "gzip, desinflar" env = HAVE_Accept-Encoding
+</ IfModule>
+</ IfModule>
+<IfModule filter_module>
+FilterDeclare COMPRESS
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ text / html
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ text / css
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ text / plain
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ text / xml
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ text / x-componente
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / javascript
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / json
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / xml
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / xhtml + xml
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / rss + xml
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / atom + xml
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / vnd.ms-fontobject
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ image / svg + xml
+FilterProvider COMPRESS DEFLATE resp = Imagem $ Content-Type / x-icon
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ application / x-font-ttf
+FilterProvider COMPRESS DEFLATE resp = Content-Type $ fonte / OpenType
+FilterChain COMPRESS
+mudança FilterProtocol COMPRESS DEFLATE = yes; byteranges = no
+</ IfModule>
+<IfModule! Mod_filter.c>
+AddOutputFilterByType DEFLATE text / html text / texto simples / aplicativo css / json
+AddOutputFilterByType DEFLATE application / javascript
+AddOutputFilterByType DEFLATE text / aplicação xml / texto xml / x-componente
+AddOutputFilterByType aplicação DEFLATE / XHTML + aplicação xml / rss + aplicação XML / átomo + xml
+AddOutputFilterByType DEFLATE image / x-icon image / svg + aplicação xml / vnd.ms-fontobject application / x-font-TTF fonte / OpenType
+</ IfModule>
+</ IfModule>
+
+<IfModule mod_headers.c>
+Header conjunto Connection keep-alive
+</ IfModule>
